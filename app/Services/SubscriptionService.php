@@ -50,11 +50,11 @@ class SubscriptionService
 
         $user_actual_sub_categories = $this->getCategoriesForSubscription($user_subscription);
 
-        $difference = (new Contains)->contains($user_actual_sub_categories, $sub_categories);
+        $contains = (new Contains)->contains($user_actual_sub_categories, $sub_categories);
 
         $actual = (new DateTime)->checkIfNotExpired($user->sub_end_date);
 
-        if($actual && $difference){
+        if($actual && $contains){
             return true;
         }
         return false;

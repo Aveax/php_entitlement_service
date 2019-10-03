@@ -8,19 +8,27 @@ use App\Services\SessionsService;
 
 class PPVController extends Controller
 {
+    protected $PPVService;
+    protected $SessionService;
+
+    public function __construct(PPVService $PPVService, SessionsService  $SessionService)
+    {
+        $this->PPVService = $PPVService;
+        $this->SessionService = $SessionService;
+    }
 
     public function index()
     {
-        (new SessionsService)->checkIfSessionExist();
+        $this->SessionService->checkIfSessionExist();
 
-        $ppvs = (new PPVService)->getAllPPV();
+        $ppvs = $this->PPVService->getAllPPV();
 
         return view('ppv.index', compact('ppvs'));
     }
 
     public function create()
     {
-        (new SessionsService)->checkIfSessionExist();
+        $this->SessionService->checkIfSessionExist();
 
         return view('ppv.create');
     }
@@ -32,36 +40,36 @@ class PPVController extends Controller
             'content'=> 'required'
         ]);
 
-        (new PPVService)->createPPV($request);
+        $this->PPVService->createPPV($request);
 
         return redirect('/ppv')->with('success', 'Stock has been added');
     }
 
     public function show($id)
     {
-        (new SessionsService)->checkIfSessionExist();
+        $this->SessionService->checkIfSessionExist();
 
-        $ppv = (new PPVService)->getPPV($id);
+        $ppv = $this->PPVService->getPPV($id);
 
-        $permissions = (new PPVService)->checkUserPermissionForPPV($ppv);
+        $permissions = $this->PPVService->checkUserPermissionForPPV($ppv);
 
         return view('ppv.single', compact('ppv', 'permissions'));
     }
 
     public function addPermission($id)
     {
-        (new SessionsService)->checkIfSessionExist();
+        $this->SessionService->checkIfSessionExist();
 
-        (new PPVService)->addPermissionForPPV($id);
+        $this->PPVService->addPermissionForPPV($id);
 
         return redirect('ppv/'.$id);
     }
 
     public function removePermission($id)
     {
-        (new SessionsService)->checkIfSessionExist();
+        $this->SessionService->checkIfSessionExist();
 
-        (new PPVService)->removePermissionForPPV($id);
+        $this->PPVService->removePermissionForPPV($id);
 
         return redirect('ppv/'.$id);
     }

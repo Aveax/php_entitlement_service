@@ -9,21 +9,31 @@ use Illuminate\Http\Request;
 
 class SVODController extends Controller
 {
+    protected $SVODService;
+    protected $SessionsService;
+    protected $UserService;
+
+    public function __construct(SVODService $SVODService, SessionsService $SessionsService, UserService $UserService)
+    {
+        $this->SVODService = $SVODService;
+        $this->SessionsService = $SessionsService;
+        $this->UserService = $UserService;
+    }
 
     public function index()
     {
-        (new SessionsService)->checkIfSessionExist();
+        $this->SessionsService->checkIfSessionExist();
 
-        $svods = (new SVODService)->getAllSVOD();
+        $svods = $this->SVODService->getAllSVOD();
 
-        $categories = (new SVODService)->getCategoriesNamesForSVODs($svods);
+        $categories = $this->SVODService->getCategoriesNamesForSVODs($svods);
 
         return view('svod.index', compact('svods', 'categories'));
     }
 
     public function create()
     {
-        (new SessionsService)->checkIfSessionExist();
+        $this->SessionsService->checkIfSessionExist();
 
         return view('svod.create');
     }
@@ -36,22 +46,22 @@ class SVODController extends Controller
             'content'=> 'required'
         ]);
 
-        (new SVODService)->createSVOD($request);
+        $this->SVODService->createSVOD($request);
 
         return redirect('/svod')->with('success', 'Stock has been added');
     }
 
     public function show($id)
     {
-        (new SessionsService)->checkIfSessionExist();
+        $this->SessionsService->checkIfSessionExist();
 
-        $svod = (new SVODService)->getSVOD($id);
+        $svod = $this->SVODService->getSVOD($id);
 
-        $user = (new UserService)->getLoggedUser();
+        $user = $this->UserService->getLoggedUser();
 
-        $permission = (new SVODService)->checkUserPermissionForSVOD($svod, $user);
+        $permission = $this->SVODService->checkUserPermissionForSVOD($svod, $user);
 
-        $category = (new SVODService)->getCategoryName($svod);
+        $category = $this->SVODService->getCategoryName($svod);
 
         return view('svod.single', compact('svod', 'category', 'permission'));
     }

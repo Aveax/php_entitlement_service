@@ -54,9 +54,11 @@ class SVODService
             return false;
         }
 
-        $user_sub = (new SubscriptionService)->getSubscription($user->subscription);
+        $SubscriptionService = new SubscriptionService;
 
-        $categories = (new SubscriptionService)->getCategoriesForSubscription($user_sub);
+        $user_sub = $SubscriptionService->getSubscription($user->subscription);
+
+        $categories = $SubscriptionService->getCategoriesForSubscription($user_sub);
 
         $actual = (new DateTime)->checkIfNotExpired($user->sub_end_date);
 

@@ -9,37 +9,48 @@ use App\Services\UserService;
 
 class SubscriptionController extends Controller
 {
+    protected $SubscriptionService;
+    protected $SessionsService;
+    protected $UserService;
+
+    public function __construct(SubscriptionService $SubscriptionService, SessionsService $SessionsService, UserService $UserService)
+    {
+        $this->SubscriptionService = $SubscriptionService;
+        $this->SessionsService = $SessionsService;
+        $this->UserService = $UserService;
+    }
+
     public function index()
     {
-        (new SessionsService)->checkIfSessionExist();
+        $this->SessionsService->checkIfSessionExist();
 
-        $subs = (new SubscriptionService)->getAllSubscriptions();
+        $subs = $this->SubscriptionService->getAllSubscriptions();
 
-        $categories = (new SubscriptionService)->getCategoriesForMultipleSubscriptions($subs);
+        $categories = $this->SubscriptionService->getCategoriesForMultipleSubscriptions($subs);
 
         return view('subscription.index', compact('subs', 'categories'));
     }
 
     public function show($id)
     {
-        (new SessionsService)->checkIfSessionExist();
+        $this->SessionsService->checkIfSessionExist();
 
-        $user = (new UserService)->getLoggedUser();
+        $user = $this->UserService->getLoggedUser();
 
-        $sub = (new SubscriptionService)->getSubscription($id);
+        $sub = $this->SubscriptionService->getSubscription($id);
 
-        $categories = (new SubscriptionService)->getCategoriesAsStringForSubscription($sub);
+        $categories = $this->SubscriptionService->getCategoriesAsStringForSubscription($sub);
 
-        $permission = (new SubscriptionService)->checkIfAllowedToBuySubscription($sub, $user);
+        $permission = $this->SubscriptionService->checkIfAllowedToBuySubscription($sub, $user);
 
         return view('subscription.single', compact('sub', 'permission', 'categories'));
     }
 
     public function buySubscription($id, $user_id)
     {
-        (new SessionsService)->checkIfSessionExist();
+        $this->SessionsService->checkIfSessionExist();
 
-        (new UserService)->buySubscription($id, $user_id);
+        $this->UserService->buySubscription($id, $user_id);
 
         return redirect('subscription/'.$id);
     }

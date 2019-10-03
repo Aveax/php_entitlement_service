@@ -6,6 +6,13 @@ use App\Services\SessionsService;
 
 class SessionsController extends Controller
 {
+    protected $SessionsService;
+
+    public function __construct(SessionsService $SessionsService)
+    {
+        $this->SessionsService = $SessionsService;
+    }
+
     public function create()
     {
         return view('session.create');
@@ -13,14 +20,14 @@ class SessionsController extends Controller
 
     public function store()
     {
-        (new SessionsService)->createSession();
+        $this->SessionsService->createSession();
 
         return redirect()->to('/');
     }
 
     public function destroy()
     {
-        (new SessionsService)->destroySession();
+        $this->SessionsService->destroySession();
 
         return redirect()->to('/');
     }

@@ -7,6 +7,13 @@ use App\Services\RegistrationService;
 
 class RegistrationController extends Controller
 {
+    protected $RegistrationService;
+
+    public function __construct(RegistrationService $RegistrationService)
+    {
+        $this->RegistrationService = $RegistrationService;
+    }
+
     public function create()
     {
         return view('registration.create');
@@ -19,7 +26,7 @@ class RegistrationController extends Controller
             'password' => 'required'
         ]);
 
-        (new RegistrationService)->createUserAccount($request);
+        $this->RegistrationService->createUserAccount($request);
 
         return redirect()->to('/');
     }
