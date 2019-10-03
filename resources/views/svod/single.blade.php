@@ -13,7 +13,7 @@
             </div><br />
         @endif
         <h1>{{$svod->title}}</h1>
-        <p>Category: {{$svod->category}}</p>
+        <p>Category: {{$category}}</p>
         @if($permission)
                 <p>Content: {{$svod->content}}</p>
         @else

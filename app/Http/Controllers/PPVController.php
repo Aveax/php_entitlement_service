@@ -3,31 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\PPV;
+use App\Services\PPVService;
+use App\Services\SessionsService;
 
 class PPVController extends Controller
 {
 
     public function index()
     {
-        try{
-            auth()->user()->id;
-        }catch(\Exception $e){
-            abort(403, 'Unauthorized action.');
-        }
+        (new SessionsService)->checkIfSessionExist();
 
-        $ppvs = PPV::all();
+        $ppvs = (new PPVService)->getAllPPV();
 
         return view('ppv.index', compact('ppvs'));
     }
 
     public function create()
     {
-        try{
-            auth()->user()->id;
-        }catch(\Exception $e){
-            abort(403, 'Unauthorized action.');
-        }
+        (new SessionsService)->checkIfSessionExist();
 
         return view('ppv.create');
     }
@@ -38,70 +31,38 @@ class PPVController extends Controller
             'title'=>'required',
             'content'=> 'required'
         ]);
-        $ppv = new PPV([
-            'title' => $request->get('title'),
-            'content'=> $request->get('content')
-        ]);
-        $ppv->save();
+
+        (new PPVService)->createPPV($request);
+
         return redirect('/ppv')->with('success', 'Stock has been added');
     }
 
     public function show($id)
     {
+        (new SessionsService)->checkIfSessionExist();
 
-        $ppv = PPV::findOrFail($id);
+        $ppv = (new PPVService)->getPPV($id);
 
-        try{
-            $user_id = auth()->user()->id;
-            $s_p = auth()->user()->season_pass;
-        }catch(\Exception $e){
-            abort(403, 'Unauthorized action.');
-        }
+        $permissions = (new PPVService)->checkUserPermissionForPPV($ppv);
 
-        $exists = $ppv->users->contains($user_id);
-        $currentDateTime = date('Y-m-d H:i:s ', time());
-
-        $season_pass = false;
-
-        if($currentDateTime <= $s_p){
-            $season_pass = true;
-        }
-
-        return view('ppv.single', compact('ppv', 'season_pass', 'exists'));
+        return view('ppv.single', compact('ppv', 'permissions'));
     }
 
     public function addPermission($id)
     {
-        try{
-            auth()->user()->id;
-        }catch(\Exception $e){
-            abort(403, 'Unauthorized action.');
-        }
+        (new SessionsService)->checkIfSessionExist();
 
-        $ppv = PPV::findOrFail($id);
-        $user_id = auth()->user()->id;
-        $exists = $ppv->users->contains($user_id);
-        if($exists == null){
-            $ppv->users()->attach($user_id);
-        }
+        (new PPVService)->addPermissionForPPV($id);
 
         return redirect('ppv/'.$id);
     }
 
     public function removePermission($id)
     {
-        try{
-            auth()->user()->id;
-        }catch(\Exception $e){
-            abort(403, 'Unauthorized action.');
-        }
+        (new SessionsService)->checkIfSessionExist();
 
-        $ppv = PPV::findOrFail($id);
-        $user_id = auth()->user()->id;
-        $ppv->users()->detach($user_id);
+        (new PPVService)->removePermissionForPPV($id);
 
         return redirect('ppv/'.$id);
-
-        //echo $ppv->users;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Services\SessionsService;
 
 class SessionsController extends Controller
 {
@@ -13,18 +13,14 @@ class SessionsController extends Controller
 
     public function store()
     {
-        if (auth()->attempt(request(['email', 'password'])) == false) {
-            return back()->withErrors([
-                'message' => 'The email or password is incorrect, please try again'
-            ]);
-        }
+        (new SessionsService)->createSession();
 
         return redirect()->to('/');
     }
 
     public function destroy()
     {
-        auth()->logout();
+        (new SessionsService)->destroySession();
 
         return redirect()->to('/');
     }

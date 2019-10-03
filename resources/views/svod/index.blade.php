@@ -26,7 +26,7 @@
                 <tr>
                     <td>{{$svod->id}}</td>
                     <td>{{$svod->title}}</td>
-                    <td>{{$svod->category}}</td>
+                    <td>{{$categories[$svod->id]}}</td>
                     <td><a href="/svod/{{$svod->id}}" class="btn btn-primary">Show</a></td>
                 </tr>
             @endforeach

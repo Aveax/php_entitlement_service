@@ -13,9 +13,9 @@
             </div><br />
         @endif
         <h1>{{$ppv->title}}</h1>
-        @if($exists or $season_pass)
+        @if($permissions['access'] or $permissions['season_pass'])
                 <p>Content: {{$ppv->content}}</p>
-                @if(!$season_pass)
+                @if(!$permissions['season_pass'])
                     <form action="/ppv/{{$ppv->id}}/remove_permission">
                         <input type="submit" value="Revoke" />
                     </form>

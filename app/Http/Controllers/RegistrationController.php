@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
+use App\Services\RegistrationService;
 
 class RegistrationController extends Controller
 {
@@ -19,15 +19,7 @@ class RegistrationController extends Controller
             'password' => 'required'
         ]);
 
-        $user = new User([
-            'name' => $request->get('name'),
-            'email'=> $request->get('email'),
-            'password'=> $request->get('password')
-        ]);
-
-        $user->save();
-
-        auth()->login($user);
+        (new RegistrationService)->createUserAccount($request);
 
         return redirect()->to('/');
     }

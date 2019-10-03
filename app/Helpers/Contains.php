@@ -4,25 +4,15 @@ namespace App\Helpers;
 
 class Contains
 {
-    private $x;
-    private $y;
-
-    function __construct($x, $y)
+    function contains($x, $y)
     {
-        if(is_array($x)){
-            $this->x = $x;
-        }else{
-            $this->x =array($x);
+        if(!is_array($x)){
+            $x =array($x);
         }
-        if(is_array($y)){
-            $this->y = $y;
-        }else{
-            $this->y = array($y);
+        if(!is_array($y)){
+            $y = array($y);
         }
-    }
 
-    function contains()
-    {
-        return !array_diff($this->y, $this->x);
+        return !array_diff($y, $x);
     }
 }

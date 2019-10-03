@@ -2,38 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\SessionsService;
+use App\Services\SVODService;
+use App\Services\UserService;
 use Illuminate\Http\Request;
-use App\SVOD;
-use App\Subscription;
-use App\Helpers\Contains;
-use App\Category;
 
 class SVODController extends Controller
 {
 
     public function index()
     {
-        try{
-            auth()->user()->id;
-        }catch(\Exception $e){
-            abort(403, 'Unauthorized action.');
-        }
+        (new SessionsService)->checkIfSessionExist();
 
-        $svods = SVOD::all();
-        foreach ($svods as $svod) {
-            $svod->category = Category::findOrFail($svod->category)->name;
-        }
+        $svods = (new SVODService)->getAllSVOD();
 
-        return view('svod.index', compact('svods'));
+        $categories = (new SVODService)->getCategoriesNamesForSVODs($svods);
+
+        return view('svod.index', compact('svods', 'categories'));
     }
 
     public function create()
     {
-        try{
-            auth()->user()->id;
-        }catch(\Exception $e){
-            abort(403, 'Unauthorized action.');
-        }
+        (new SessionsService)->checkIfSessionExist();
 
         return view('svod.create');
     }
@@ -42,47 +32,27 @@ class SVODController extends Controller
     {
         $request->validate([
             'title'=>'required',
-            'category'=>'required',
+            'category'=>'required|exists:categories,id',
             'content'=> 'required'
         ]);
-        $svod = new SVOD([
-            'title' => $request->get('title'),
-            'category'=> $request->get('category'),
-            'content'=> $request->get('content')
-        ]);
-        $svod->save();
+
+        (new SVODService)->createSVOD($request);
+
         return redirect('/svod')->with('success', 'Stock has been added');
     }
 
     public function show($id)
     {
+        (new SessionsService)->checkIfSessionExist();
 
-        $svod = SVOD::findOrFail($id);
+        $svod = (new SVODService)->getSVOD($id);
 
-        $user_sub = null;
-        $sub_end_date = null;
+        $user = (new UserService)->getLoggedUser();
 
-        try{
-            $user_sub = Subscription::find(auth()->user()->subscription);
-            $sub_end_date = auth()->user()->sub_end_date;
-        }catch(\Exception $e) {
-            abort(403, 'Unauthorized action.');
-        }
+        $permission = (new SVODService)->checkUserPermissionForSVOD($svod, $user);
 
-        $permission = false;
-        $currentDateTime = date('Y-m-d H:i:s ', time());
+        $category = (new SVODService)->getCategoryName($svod);
 
-        if($user_sub != null & $currentDateTime <= $sub_end_date){
-            $user_sub_categories = [];
-            foreach ($user_sub->category as $category) {
-                array_push($user_sub_categories, $category->id);
-            }
-            $con = new Contains($user_sub_categories, $svod->category);
-            $permission = $con->contains();
-        }
-
-        $svod->category = Category::findOrFail($svod->category)->name;
-
-        return view('svod.single', compact('svod', 'permission'));
+        return view('svod.single', compact('svod', 'category', 'permission'));
     }
 }

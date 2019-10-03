@@ -2,48 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\User as Auth;
+use App\Services\SessionsService;
+use App\Services\UserService;
 
 class UserController extends Controller
 {
 
     public function show($id)
     {
+        (new SessionsService)->checkIfSessionExist();
 
-        $user = Auth::findOrFail($id);
+        $user = (new UserService)->getUser($id);
 
-        $permission = false;
+        $permission = (new UserService)->checkIfItsLoggedUserProfile($id);
 
-        try{
-            if($id == auth()->user()->id){
-                $permission = true;
-            }
-        }catch(\Exception $e){
-            abort(403, 'Unauthorized action.');
-        }
-
-        $currentDateTime = date('Y-m-d H:i:s ', time());
-        $season_pass = false;
-        if($currentDateTime <= $user->season_pass){
-            $season_pass = true;
-        }
+        $season_pass =(new UserService)->checkIfSeasonPassActive($user->season_pass);
 
         return view('user.single', compact('user', 'season_pass', 'permission'));
     }
 
     public function buySeasonPass($id)
     {
-        try{
-            auth()->user()->id;
-        }catch(\Exception $e){
-            abort(403, 'Unauthorized action.');
-        }
+        (new SessionsService)->checkIfSessionExist();
 
-        $user = Auth::findOrFail($id);
-        $dateTime =  date('Y-m-d H:i:s ', strtotime(' + 7 days'));
-        $user->season_pass = $dateTime;
-        $user->save();
+        (new UserService)->buySeasonPass($id);
 
         return redirect('user/'.$id);
     }
