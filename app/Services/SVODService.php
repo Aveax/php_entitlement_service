@@ -2,42 +2,47 @@
 
 namespace App\Services;
 
-use App\SVOD;
-use App\Category;
+use App\Repositories\SubscriptionRepository;
+use App\Repositories\SVODRepository;
+use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 use App\Helpers\Datetime;
 use App\Helpers\Contains;
 
 class SVODService
 {
+    protected $SVODRepository;
+    protected $CategoryRepository;
+
+    public function __construct(SVODRepository $SVODRepository, CategoryRepository $CategoryRepository)
+    {
+        $this->SVODRepository = $SVODRepository;
+        $this->CategoryRepository = $CategoryRepository;
+    }
+
     public function getAllSVOD()
     {
-        return SVOD::all();
+        return $this->SVODRepository->all();
     }
 
     public function getSVOD($id)
     {
-        return SVOD::findOrFail($id);
+        return $this->SVODRepository->get($id);
     }
 
     public function createSVOD(Request $request)
     {
-        $svod = new SVOD([
-            'title' => $request->get('title'),
-            'category'=> $request->get('category'),
-            'content'=> $request->get('content')
-        ]);
-        $svod->save();
+        $this->SVODRepository->create($request);
     }
 
     public function getCategoryName($svod)
     {
-        $category = Category::findOrFail($svod->category);
+        $category = $this->CategoryRepository->get($svod->category);
 
         return $category->name;
     }
 
-    public function getCategoriesNamesForSVODs($svods)
+    public function getCategoriesNameForSVODs($svods)
     {
         $categories = [];
 
@@ -54,7 +59,7 @@ class SVODService
             return false;
         }
 
-        $SubscriptionService = new SubscriptionService;
+        $SubscriptionService = new SubscriptionService(new SubscriptionRepository);
 
         $user_sub = $SubscriptionService->getSubscription($user->subscription);
 

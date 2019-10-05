@@ -4,27 +4,31 @@ namespace App\Services;
 
 use Illuminate\Http\Request;
 use App\PPV;
+use App\Repositories\PPVRepository;
 use App\Helpers\Datetime;
 
 class PPVService
 {
+    protected $PPVRepository;
+
+    public function __construct(PPVRepository $PPVRepository)
+    {
+        $this->PPVRepository = $PPVRepository;
+    }
+
     public function getAllPPV()
     {
-        return PPV::all();
+        return $this->PPVRepository->all();
     }
 
     public function createPPV(Request $request)
     {
-        $ppv = new PPV([
-            'title' => $request->get('title'),
-            'content'=> $request->get('content')
-        ]);
-        $ppv->save();
+        $this->PPVRepository->create($request);
     }
 
     public function getPPV($id)
     {
-        $ppv = PPV::findOrFail($id);
+        $ppv = $this->PPVRepository->get($id);
 
         return $ppv;
     }

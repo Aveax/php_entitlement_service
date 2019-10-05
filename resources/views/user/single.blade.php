@@ -19,7 +19,9 @@
             <p>Season Pass end date: {{$user->season_pass}}</p>
             @if($permission)
                 @if($season_pass == false)
-                    <form action="/user/{{$user->id}}/buy_season_pass">
+                    <form action="/user/{{$user->id}}/buy_season_pass" method="post">
+                        @method('PUT')
+                        @csrf
                         <input type="submit" value="Buy Season Pass" />
                     </form>
                 @endif

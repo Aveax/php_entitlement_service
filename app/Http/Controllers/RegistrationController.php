@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\RegistrationRequest;
 use App\Services\RegistrationService;
 
 class RegistrationController extends Controller
@@ -18,13 +18,9 @@ class RegistrationController extends Controller
     {
         return view('registration.create');
     }
-    public function store(Request $request)
+    public function store(RegistrationRequest $request)
     {
-        $this->validate(request(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required'
-        ]);
+        $request->validated();
 
         $this->RegistrationService->createUserAccount($request);
 

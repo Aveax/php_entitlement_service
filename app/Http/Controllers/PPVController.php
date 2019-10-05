@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\PPVRequest;
 use App\Services\PPVService;
 use App\Services\SessionsService;
 
@@ -33,12 +33,9 @@ class PPVController extends Controller
         return view('ppv.create');
     }
 
-    public function store(Request $request)
+    public function store(PPVRequest $request)
     {
-        $request->validate([
-            'title'=>'required',
-            'content'=> 'required'
-        ]);
+        $request->validated();
 
         $this->PPVService->createPPV($request);
 

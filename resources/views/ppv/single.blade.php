@@ -16,13 +16,16 @@
         @if($permissions['access'] or $permissions['season_pass'])
                 <p>Content: {{$ppv->content}}</p>
                 @if(!$permissions['season_pass'])
-                    <form action="/ppv/{{$ppv->id}}/remove_permission">
+                    <form action="/ppv/{{$ppv->id}}/permission" method="post">
+                        @method('DELETE')
+                        @csrf
                         <input type="submit" value="Revoke" />
                     </form>
                 @endif
         @else
                 <p>Content: Access Denied</p>
-                <form action="/ppv/{{$ppv->id}}/add_permission">
+                <form action="/ppv/{{$ppv->id}}/permission" method="post">
+                    @csrf
                     <input type="submit" value="Add" />
                 </form>
         @endif

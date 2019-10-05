@@ -2,14 +2,21 @@
 
 namespace App\Services;
 
-use App\User;
 use App\Helpers\Datetime;
+use App\Repositories\UserRepository;
 
 class UserService
 {
+    protected $UserRepository;
+
+    public function __construct(UserRepository $UserRepository)
+    {
+        $this->UserRepository = $UserRepository;
+    }
+
     public function getUser($id)
     {
-        return User::findOrFail($id);
+        return $this->UserRepository->get($id);
     }
 
     public function getLoggedUser()

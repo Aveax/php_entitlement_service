@@ -8,6 +8,7 @@ use Tests\TestCase;
 use App\User;
 use App\PPV;
 use App\Services\PPVService;
+use App\Repositories\PPVRepository;
 use Illuminate\Http\Request;
 use Faker\Factory as Faker;
 
@@ -19,7 +20,7 @@ class PPVTest extends TestCase
     public function test_get_all_ppv()
     {
         // 2 bcs two ppv are inserted automatically after table create
-        $this->assertCount(2, (new PPVService)->getAllPPV());
+        $this->assertCount(2, (new PPVService(new PPVRepository))->getAllPPV());
     }
 
     /** @test **/
@@ -34,9 +35,9 @@ class PPVTest extends TestCase
         $request->request->add(['title' => $faker->regexify('[A-Za-z0-9]{10}')]);
         $request->request->add(['content' => $faker->regexify('[A-Za-z0-9]{10}')]);
 
-        (new PPVService)->createPPV($request);
+        (new PPVService(new PPVRepository))->createPPV($request);
 
-        $this->assertCount($ppv_count + 1, (new PPVService)->getAllPPV());
+        $this->assertCount($ppv_count + 1, (new PPVService(new PPVRepository))->getAllPPV());
     }
 
     /** @test **/
@@ -44,7 +45,7 @@ class PPVTest extends TestCase
     {
         $ppv = factory(PPV::class)->create();
 
-        $check = $this->equals($ppv, (new PPVService)->getPPV($ppv->id));
+        $check = $this->equals($ppv, (new PPVService(new PPVRepository))->getPPV($ppv->id));
 
         $this->assertTrue($check);
     }
@@ -68,7 +69,7 @@ class PPVTest extends TestCase
 
         $ppv = factory(PPV::class)->create();
 
-        (new PPVService)->addPermissionForPPV($ppv->id);
+        (new PPVService(new PPVRepository))->addPermissionForPPV($ppv->id);
 
         $check = $ppv->users->contains($user->id);
 
@@ -82,7 +83,7 @@ class PPVTest extends TestCase
         $this->actingAs($user);
 
         $ppv = factory(PPV::class)->create();
-        (new PPVService)->addPermissionForPPV($ppv->id);
+        (new PPVService(new PPVRepository))->addPermissionForPPV($ppv->id);
 
         $ppv->users()->detach($user->id);
 
@@ -99,9 +100,9 @@ class PPVTest extends TestCase
 
         $ppv = factory(PPV::class)->create();
 
-        (new PPVService)->addPermissionForPPV($ppv->id);
+        (new PPVService(new PPVRepository))->addPermissionForPPV($ppv->id);
 
-        $permission = (new PPVService)->checkUserPermissionForPPV($ppv);
+        $permission = (new PPVService(new PPVRepository))->checkUserPermissionForPPV($ppv);
 
         $this->assertTrue($permission['access']);
     }
@@ -114,7 +115,7 @@ class PPVTest extends TestCase
 
         $ppv = factory(PPV::class)->create();
 
-        $permission = (new PPVService)->checkUserPermissionForPPV($ppv);
+        $permission = (new PPVService(new PPVRepository))->checkUserPermissionForPPV($ppv);
 
         $this->assertFalse($permission['access']);
     }
@@ -128,7 +129,7 @@ class PPVTest extends TestCase
 
         $ppv = factory(PPV::class)->create();
 
-        $permission = (new PPVService)->checkUserPermissionForPPV($ppv);
+        $permission = (new PPVService(new PPVRepository))->checkUserPermissionForPPV($ppv);
 
         $this->assertTrue($permission['season_pass']);
     }
@@ -141,7 +142,7 @@ class PPVTest extends TestCase
 
         $ppv = factory(PPV::class)->create();
 
-        $permission = (new PPVService)->checkUserPermissionForPPV($ppv);
+        $permission = (new PPVService(new PPVRepository))->checkUserPermissionForPPV($ppv);
 
         $this->assertFalse($permission['season_pass']);
     }

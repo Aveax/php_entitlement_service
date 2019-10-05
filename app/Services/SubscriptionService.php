@@ -2,21 +2,28 @@
 
 namespace App\Services;
 
+use App\Repositories\SubscriptionRepository;
 use App\Helpers\Contains;
 use App\Helpers\DateTime;
-use App\Subscription;
 use App\Helpers\ForCategory;
 
 class SubscriptionService
 {
+    protected $SubscriptionRepository;
+
+    public function __construct(SubscriptionRepository $SubscriptionRepository)
+    {
+        $this->SubscriptionRepository = $SubscriptionRepository;
+    }
+
     public function getAllSubscriptions()
     {
-        return Subscription::all();
+        return $this->SubscriptionRepository->all();
     }
 
     public function getSubscription($id)
     {
-        return Subscription::findOrFail($id);
+        return $this->SubscriptionRepository->get($id);
     }
 
     public function getCategoriesForSubscription($sub){

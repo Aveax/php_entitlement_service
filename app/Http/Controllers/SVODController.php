@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SVODRequest;
 use App\Services\SessionsService;
 use App\Services\SVODService;
 use App\Services\UserService;
-use Illuminate\Http\Request;
 
 class SVODController extends Controller
 {
@@ -26,7 +26,7 @@ class SVODController extends Controller
 
         $svods = $this->SVODService->getAllSVOD();
 
-        $categories = $this->SVODService->getCategoriesNamesForSVODs($svods);
+        $categories = $this->SVODService->getCategoriesNameForSVODs($svods);
 
         return view('svod.index', compact('svods', 'categories'));
     }
@@ -38,13 +38,9 @@ class SVODController extends Controller
         return view('svod.create');
     }
 
-    public function store(Request $request)
+    public function store(SVODRequest $request)
     {
-        $request->validate([
-            'title'=>'required',
-            'category'=>'required|exists:categories,id',
-            'content'=> 'required'
-        ]);
+        $request->validated();
 
         $this->SVODService->createSVOD($request);
 

@@ -2,21 +2,19 @@
 
 namespace App\Services;
 
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
-use App\User;
 
 class RegistrationService
 {
+    protected $UserRepository;
+
+    public function __construct(UserRepository $UserRepository)
+    {
+        $this->UserRepository = $UserRepository;
+    }
     public function createUserAccount(Request $request)
     {
-        $user = new User([
-            'name' => $request->get('name'),
-            'email'=> $request->get('email'),
-            'password'=> $request->get('password')
-        ]);
-
-        $user->save();
-
-        auth()->login($user);
+        $this->UserRepository->create($request);
     }
 }
