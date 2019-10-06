@@ -3,9 +3,9 @@
 namespace App\Services;
 
 use App\Repositories\Interfaces\UserRepositoryInterface;
-use Illuminate\Http\Request;
+use App\Services\Interfaces\RegistrationServiceInterface;
 
-class RegistrationService
+class RegistrationService implements RegistrationServiceInterface
 {
     protected $UserRepository;
 
@@ -13,7 +13,7 @@ class RegistrationService
     {
         $this->UserRepository = $UserRepository;
     }
-    public function createUserAccount(Request $request)
+    public function createUserAccount($request)
     {
         $this->UserRepository->create($request);
     }

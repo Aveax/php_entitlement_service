@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SVODRequest;
-use App\Services\SessionsService;
-use App\Services\SVODService;
-use App\Services\UserService;
+use App\Services\Interfaces\SessionsServiceInterface;
+use App\Services\Interfaces\SVODServiceInterface;
+use App\Services\Interfaces\UserServiceInterface;
 
 class SVODController extends Controller
 {
@@ -13,7 +13,9 @@ class SVODController extends Controller
     protected $SessionsService;
     protected $UserService;
 
-    public function __construct(SVODService $SVODService, SessionsService $SessionsService, UserService $UserService)
+    public function __construct(SVODServiceInterface $SVODService,
+                                SessionsServiceInterface $SessionsService,
+                                UserServiceInterface $UserService)
     {
         $this->SVODService = $SVODService;
         $this->SessionsService = $SessionsService;

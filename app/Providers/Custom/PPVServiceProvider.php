@@ -17,5 +17,10 @@ class PPVServiceProvider extends ServiceProvider {
             'App\Repositories\Interfaces\PPVRepositoryInterface',
             'App\Repositories\PPVRepository'
         );
+
+        $this->app->bind(
+            'App\Services\Interfaces\PPVServiceInterface',
+            'App\Services\PPVService'
+        );
     }
 }

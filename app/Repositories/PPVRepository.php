@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Repositories\Interfaces\PPVRepositoryInterface;
-use Illuminate\Http\Request;
 use App\PPV;
 
 class PPVRepository implements PPVRepositoryInterface
@@ -18,7 +17,7 @@ class PPVRepository implements PPVRepositoryInterface
         return PPV::all();
     }
 
-    public function create(Request $request)
+    public function create($request)
     {
         $ppv = new PPV([
             'title' => $request->get('title'),

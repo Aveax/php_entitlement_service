@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\SessionsService;
+use App\Services\Interfaces\SessionsServiceInterface;
 
 class SessionsController extends Controller
 {
     protected $SessionsService;
 
-    public function __construct(SessionsService $SessionsService)
+    public function __construct(SessionsServiceInterface $SessionsService)
     {
         $this->SessionsService = $SessionsService;
     }

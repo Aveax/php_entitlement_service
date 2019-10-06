@@ -2,26 +2,28 @@
 
 namespace App\Services;
 
-use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
+use App\Services\Interfaces\SVODServiceInterface;
+use App\Services\Interfaces\SubscriptionServiceInterface;
 use App\Repositories\Interfaces\SVODRepositoryInterface;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
-use Illuminate\Http\Request;
 use App\Helpers\Datetime;
 use App\Helpers\Contains;
 
-class SVODService
+class SVODService implements SVODServiceInterface
 {
     protected $SVODRepository;
     protected $CategoryRepository;
-    protected $SubscriptionRepository;
+
+    protected $SubscriptionService;
 
     public function __construct(SVODRepositoryInterface $SVODRepository,
                                 CategoryRepositoryInterface $CategoryRepository,
-                                SubscriptionRepositoryInterface $SubscriptionRepository)
+                                SubscriptionServiceInterface $SubscriptionService)
     {
         $this->SVODRepository = $SVODRepository;
         $this->CategoryRepository = $CategoryRepository;
-        $this->SubscriptionRepository = $SubscriptionRepository;
+
+        $this->SubscriptionService = $SubscriptionService;
     }
 
     public function getAllSVOD()
@@ -34,7 +36,7 @@ class SVODService
         return $this->SVODRepository->get($id);
     }
 
-    public function createSVOD(Request $request)
+    public function createSVOD($request)
     {
         $this->SVODRepository->create($request);
     }
@@ -63,11 +65,9 @@ class SVODService
             return false;
         }
 
-        $SubscriptionService = new SubscriptionService($this->SubscriptionRepository);
+        $user_sub = $this->SubscriptionService->getSubscription($user->subscription);
 
-        $user_sub = $SubscriptionService->getSubscription($user->subscription);
-
-        $categories = $SubscriptionService->getCategoriesForSubscription($user_sub);
+        $categories = $this->SubscriptionService->getCategoriesForSubscription($user_sub);
 
         $actual = (new DateTime)->checkIfNotExpired($user->sub_end_date);
 

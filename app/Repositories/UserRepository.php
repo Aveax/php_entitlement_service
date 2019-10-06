@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Repositories\Interfaces\UserRepositoryInterface;
-use Illuminate\Http\Request;
 use App\User;
 
 class UserRepository implements UserRepositoryInterface
@@ -13,7 +12,7 @@ class UserRepository implements UserRepositoryInterface
         return User::findOrFail($user_id);
     }
 
-    public function create(Request $request)
+    public function create($request)
     {
         $user = new User([
             'name' => $request->get('name'),

@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Repositories\Interfaces\SVODRepositoryInterface;
-use Illuminate\Http\Request;
 use App\SVOD;
 
 class SVODRepository implements SVODRepositoryInterface
@@ -18,7 +17,7 @@ class SVODRepository implements SVODRepositoryInterface
         return SVOD::all();
     }
 
-    public function create(Request $request)
+    public function create($request)
     {
         $svod = new SVOD([
             'title' => $request->get('title'),

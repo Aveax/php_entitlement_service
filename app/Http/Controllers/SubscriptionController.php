@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Services\SubscriptionService;
-use App\Services\SessionsService;
-use App\Services\UserService;
+use App\Services\Interfaces\SubscriptionServiceInterface;
+use App\Services\Interfaces\SessionsServiceInterface;
+use App\Services\Interfaces\UserServiceInterface;
 
 class SubscriptionController extends Controller
 {
@@ -13,7 +12,9 @@ class SubscriptionController extends Controller
     protected $SessionsService;
     protected $UserService;
 
-    public function __construct(SubscriptionService $SubscriptionService, SessionsService $SessionsService, UserService $UserService)
+    public function __construct(SubscriptionServiceInterface $SubscriptionService,
+                                SessionsServiceInterface $SessionsService,
+                                UserServiceInterface $UserService)
     {
         $this->SubscriptionService = $SubscriptionService;
         $this->SessionsService = $SessionsService;

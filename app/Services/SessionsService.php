@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
-class SessionsService
+use App\Services\Interfaces\SessionsServiceInterface;
+
+class SessionsService implements SessionsServiceInterface
 {
     public function checkIfSessionExist()
     {

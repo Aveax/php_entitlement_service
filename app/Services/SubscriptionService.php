@@ -2,12 +2,13 @@
 
 namespace App\Services;
 
+use App\Services\Interfaces\SubscriptionServiceInterface;
 use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Helpers\Contains;
 use App\Helpers\DateTime;
 use App\Helpers\ForCategory;
 
-class SubscriptionService
+class SubscriptionService implements SubscriptionServiceInterface
 {
     protected $SubscriptionRepository;
 
@@ -26,7 +27,8 @@ class SubscriptionService
         return $this->SubscriptionRepository->get($id);
     }
 
-    public function getCategoriesForSubscription($sub){
+    public function getCategoriesForSubscription($sub)
+    {
         return (new ForCategory)->getCategoriesFromSubscription($sub);
     }
 

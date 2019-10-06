@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegistrationRequest;
-use App\Services\RegistrationService;
+use App\Services\Interfaces\RegistrationServiceInterface;
 
 class RegistrationController extends Controller
 {
     protected $RegistrationService;
 
-    public function __construct(RegistrationService $RegistrationService)
+    public function __construct(RegistrationServiceInterface $RegistrationService)
     {
         $this->RegistrationService = $RegistrationService;
     }

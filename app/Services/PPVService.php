@@ -2,12 +2,11 @@
 
 namespace App\Services;
 
-use Illuminate\Http\Request;
-use App\PPV;
+use App\Services\Interfaces\PPVServiceInterface;
 use App\Repositories\Interfaces\PPVRepositoryInterface;
 use App\Helpers\Datetime;
 
-class PPVService
+class PPVService implements PPVServiceInterface
 {
     protected $PPVRepository;
 
@@ -21,7 +20,7 @@ class PPVService
         return $this->PPVRepository->all();
     }
 
-    public function createPPV(Request $request)
+    public function createPPV($request)
     {
         $this->PPVRepository->create($request);
     }
@@ -33,7 +32,7 @@ class PPVService
         return $ppv;
     }
 
-    public function checkUserPermissionForPPV(PPV $ppv)
+    public function checkUserPermissionForPPV($ppv)
     {
         $user = auth()->user();
 

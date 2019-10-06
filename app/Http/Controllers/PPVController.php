@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PPVRequest;
-use App\Services\PPVService;
-use App\Services\SessionsService;
+use App\Services\Interfaces\PPVServiceInterface;
+use App\Services\Interfaces\SessionsServiceInterface;
 
 class PPVController extends Controller
 {
     protected $PPVService;
     protected $SessionService;
 
-    public function __construct(PPVService $PPVService, SessionsService  $SessionService)
+    public function __construct(PPVServiceInterface $PPVService, SessionsServiceInterface  $SessionService)
     {
         $this->PPVService = $PPVService;
         $this->SessionService = $SessionService;

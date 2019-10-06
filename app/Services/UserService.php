@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
+use App\Services\Interfaces\UserServiceInterface;
 use App\Helpers\Datetime;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 
-class UserService
+class UserService implements UserServiceInterface
 {
     protected $UserRepository;
 

@@ -17,5 +17,10 @@ class SVODServiceProvider extends ServiceProvider {
             'App\Repositories\Interfaces\SVODRepositoryInterface',
             'App\Repositories\SVODRepository'
         );
+
+        $this->app->bind(
+            'App\Services\Interfaces\SVODServiceInterface',
+            'App\Services\SVODService'
+        );
     }
 }

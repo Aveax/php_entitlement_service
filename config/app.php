@@ -183,6 +183,8 @@ return [
         App\Providers\Custom\SubscriptionServiceProvider::class,
         App\Providers\Custom\SVODServiceProvider::class,
         App\Providers\Custom\UserServiceProvider::class,
+        App\Providers\Custom\RegistrationServiceProvider::class,
+        App\Providers\Custom\SessionServiceProvider::class,
 
     ],
 

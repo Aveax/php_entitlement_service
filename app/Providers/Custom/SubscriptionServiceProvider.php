@@ -17,5 +17,10 @@ class SubscriptionServiceProvider extends ServiceProvider {
             'App\Repositories\Interfaces\SubscriptionRepositoryInterface',
             'App\Repositories\SubscriptionRepository'
         );
+
+        $this->app->bind(
+            'App\Services\Interfaces\SubscriptionServiceInterface',
+            'App\Services\SubscriptionService'
+        );
     }
 }
