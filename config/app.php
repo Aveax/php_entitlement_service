@@ -175,6 +175,15 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+        * Custom Application Service Providers...
+        */
+        App\Providers\Custom\CategoryServiceProvider::class,
+        App\Providers\Custom\PPVServiceProvider::class,
+        App\Providers\Custom\SubscriptionServiceProvider::class,
+        App\Providers\Custom\SVODServiceProvider::class,
+        App\Providers\Custom\UserServiceProvider::class,
+
     ],
 
     /*

@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
-use App\Repositories\UserRepository;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Http\Request;
 
 class RegistrationService
 {
     protected $UserRepository;
 
-    public function __construct(UserRepository $UserRepository)
+    public function __construct(UserRepositoryInterface $UserRepository)
     {
         $this->UserRepository = $UserRepository;
     }

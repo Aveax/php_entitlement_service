@@ -2,10 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Repositories\Interfaces\PPVRepositoryInterface;
 use Illuminate\Http\Request;
 use App\PPV;
 
-class PPVRepository
+class PPVRepository implements PPVRepositoryInterface
 {
     public function get($ppv_id)
     {

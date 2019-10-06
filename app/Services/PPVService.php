@@ -4,14 +4,14 @@ namespace App\Services;
 
 use Illuminate\Http\Request;
 use App\PPV;
-use App\Repositories\PPVRepository;
+use App\Repositories\Interfaces\PPVRepositoryInterface;
 use App\Helpers\Datetime;
 
 class PPVService
 {
     protected $PPVRepository;
 
-    public function __construct(PPVRepository $PPVRepository)
+    public function __construct(PPVRepositoryInterface $PPVRepository)
     {
         $this->PPVRepository = $PPVRepository;
     }

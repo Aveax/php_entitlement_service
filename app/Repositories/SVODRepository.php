@@ -2,10 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Repositories\Interfaces\SVODRepositoryInterface;
 use Illuminate\Http\Request;
 use App\SVOD;
 
-class SVODRepository
+class SVODRepository implements SVODRepositoryInterface
 {
     public function get($svod_id)
     {

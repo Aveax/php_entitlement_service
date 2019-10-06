@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Repositories\SubscriptionRepository;
+use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Helpers\Contains;
 use App\Helpers\DateTime;
 use App\Helpers\ForCategory;
@@ -11,7 +11,7 @@ class SubscriptionService
 {
     protected $SubscriptionRepository;
 
-    public function __construct(SubscriptionRepository $SubscriptionRepository)
+    public function __construct(SubscriptionRepositoryInterface $SubscriptionRepository)
     {
         $this->SubscriptionRepository = $SubscriptionRepository;
     }

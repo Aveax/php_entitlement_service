@@ -3,13 +3,13 @@
 namespace App\Services;
 
 use App\Helpers\Datetime;
-use App\Repositories\UserRepository;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 
 class UserService
 {
     protected $UserRepository;
 
-    public function __construct(UserRepository $UserRepository)
+    public function __construct(UserRepositoryInterface $UserRepository)
     {
         $this->UserRepository = $UserRepository;
     }

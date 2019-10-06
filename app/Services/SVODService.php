@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Repositories\SubscriptionRepository;
-use App\Repositories\SVODRepository;
-use App\Repositories\CategoryRepository;
+use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
+use App\Repositories\Interfaces\SVODRepositoryInterface;
+use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use Illuminate\Http\Request;
 use App\Helpers\Datetime;
 use App\Helpers\Contains;
@@ -13,11 +13,15 @@ class SVODService
 {
     protected $SVODRepository;
     protected $CategoryRepository;
+    protected $SubscriptionRepository;
 
-    public function __construct(SVODRepository $SVODRepository, CategoryRepository $CategoryRepository)
+    public function __construct(SVODRepositoryInterface $SVODRepository,
+                                CategoryRepositoryInterface $CategoryRepository,
+                                SubscriptionRepositoryInterface $SubscriptionRepository)
     {
         $this->SVODRepository = $SVODRepository;
         $this->CategoryRepository = $CategoryRepository;
+        $this->SubscriptionRepository = $SubscriptionRepository;
     }
 
     public function getAllSVOD()
@@ -59,7 +63,7 @@ class SVODService
             return false;
         }
 
-        $SubscriptionService = new SubscriptionService(new SubscriptionRepository);
+        $SubscriptionService = new SubscriptionService($this->SubscriptionRepository);
 
         $user_sub = $SubscriptionService->getSubscription($user->subscription);
 

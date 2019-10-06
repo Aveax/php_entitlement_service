@@ -2,9 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Subscription;
 
-class SubscriptionRepository
+class SubscriptionRepository implements SubscriptionRepositoryInterface
 {
     public function get($subscription_id)
     {
